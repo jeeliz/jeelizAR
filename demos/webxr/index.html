@@ -1,0 +1,225 @@
+<html>
+	<head>
+		<title>Jeeliz AR WebXR DEMO</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body, html {
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+				-webkit-user-select: none;
+				user-select: none;
+			}
+			#target {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+			}
+			.text-box {
+				position: absolute;
+				top: 5%;
+				left: 50%;
+				color: white;
+				background: rgba(27,55,55,0.75);;
+				outline: 1px solid rgba(127,255,255,0.75);
+				border: 0px;
+				padding: 5px 10px;
+				transform: translate(-50%, 0%);
+				font-size: 0.8em;
+			}
+			.common-message {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 10px;
+			}
+			.jeelizCanvas { /* display of Jeeliz canvas. usefull only if isDebugRender: true */
+				display: none;
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				border: 1px solid red;
+				width: 20vw;
+			}
+		</style>
+		<link rel="stylesheet" href="../../libs/webxr/common/common.css"/>
+
+		<!-- THREE.JS (3D engine): -->
+		<script src="../../libs/threejs/v95/three.js"></script>
+
+		<!-- Stuffs from WebXR polyfill - see https://github.com/mozilla/webxr-polyfill -->
+		<script src="../../libs/webxr/stats.js"></script>
+		<script type="module" src="../../libs/webxr/polyfill/XRPolyfill.js"></script>
+		<script nomodule src="../../libs/webxr/dist/webxr-polyfill.js"></script>
+		<script src="../../libs/webxr/common/common.js"></script>
+
+		<!-- JEELIZ AR and its helper: -->
+		<script src="../../dist/jeelizAR.js"></script>
+		<script src="../../helpers/JeelizWebXRHelper.js"></script>
+	</head>
+	<body>
+		<div id="target" />
+		<div onclick="hideMe(this)" id="description">
+			<h2>Jeeliz AR WebXR demo</h2>
+			<h5>(click to dismiss)</h5>
+			<p>Label objects detected by the neural net. Test it with a mug or a bike.</p>
+		</div>
+		<script>
+			// do some time stamping, just to show the performance numbers
+			var beginTime = ( performance || Date ).now(), prevTime = beginTime, frames = 0;
+			
+			var stats = new Stats();
+
+			// create a new pane for the stats panel to show the fps of the vision processing
+			stats.domElement.style.cssText = 'position:fixed;top:2%;right:2%;cursor:pointer;opacity:0.9;z-index:10000';
+			var cvPanel = stats.addPanel( new Stats.Panel( 'CV fps', '#ff8', '#221' ) );
+			stats.showPanel( 2 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+			var updateCVFPS = function () {
+				frames ++;
+				var time = ( performance || Date ).now();
+				if ( time >= prevTime + 1000 ) {
+					cvPanel.update( ( frames * 1000 ) / ( time - prevTime ), 100 );
+					prevTime = time;
+					frames = 0;
+				}
+				beginTime = time;
+			}
+			document.body.appendChild( stats.dom );
+
+
+			//build THREE debug stuffs:
+			//the geometry should be centered along X and Z axis (horizontal axis)
+			//and aligned to the bottom along the Y (vertical) axis
+			const _threeDebugMaterial=new THREE.MeshNormalMaterial();
+			var _threeFont=false;
+			const threeFontLoader = new THREE.FontLoader();
+			threeFontLoader.load( '../../libs/threejs/v95/helvetiker_regular.typeface.json', function ( font ) {
+				_threeFont=font;
+			} );;
+			const _threeGeometries={};
+			const _threeMatrixAnchorOffsetWorld=new THREE.Matrix4();
+
+			
+			class JeelizARDemo extends XRExampleBase {
+				constructor(domElement){
+					super(domElement, false, true, true)
+					var self = this;
+					JeelizWebXRHelper.init({
+						DOMCanvasParent: document.body,
+						neuralNet: '../../neuralNets/basic4Light.json',
+						nDetections: 5,
+						visionDoneCallback: self.handleVisionDone.bind(self),
+						isDebugRender: false
+					});
+				}
+
+				// called when there is a new session
+				newSession() {
+					// this can only be done inside the session
+					console.log('INFO in index.html : newSession() launched');
+					this.setVideoWorker(JeelizWebXRHelper.videoWorker);
+				}
+
+				// Called during construction
+				initializeScene(){
+					
+				}
+
+				// called each frame
+				updateScene(frame){
+					stats.update()
+				}
+
+				handleVisionDone(detectState) {
+					if (detectState && detectState.label){
+						//something has been detected !
+
+						//inspired from hit_test Demo (from Mozilla webxr-polyfill)
+						//compute normalized x and y :
+						var pose=JeelizWebXRHelper.compute_pose(detectState, this.camera);
+						
+						//throw a ray and test if it intersects a plane : 
+						this.session.hitTest(pose.x, pose.y).then(anchorOffset => {
+							if(anchorOffset === null){
+								//DebugUtils.log_domConsole('INFO in index.html - handleVisionDone() : MISS');
+							} else {
+								//DebugUtils.log_domConsole('INFO in index.html - handleVisionDone() : HIT');
+								//explains what is an Anchor, AnchorOffset, ... :
+								// https://github.com/mozilla/webxr-polyfill/blob/master/CODING.md#finding-and-updating-anchors
+								const anchor = this.session.reality._getAnchor(anchorOffset.anchorUID);
+								_threeMatrixAnchorOffsetWorld.fromArray(anchorOffset.getOffsetTransform(anchor.coordinateSystem));
+								JeelizWebXRHelper.update_pose(_threeMatrixAnchorOffsetWorld, this.camera, pose);
+
+								const sizeRange={ //format: [min, max] in meters. diameter of the detection area
+									CUP: [0.04, 0.2],
+									BICYCLE: [0.8, 2.5],
+									CHAIR: [0.8, 1.5],
+									LAPTOP: [0.3, 0.7]
+								}[detectState.label];
+								if (!JeelizWebXRHelper.check_size(pose, sizeRange)){
+									console.log('WRONG size');
+									return;
+								}
+								
+								this.addAnchoredNode(anchorOffset, this._createSceneGraphNode(pose.scale, pose.yaw, detectState.label));
+							}
+						}).catch(err => {
+							console.error('ERROR in index.html - handleVisionDone() :', err);
+							//DebugUtils.log_domConsole(console.error('ERROR in index.html - handleVisionDone() :', err));
+						})
+					} //end if sthing detected
+
+
+					// ask for the next frame (before we construct that debugging frame, if we're doing that)
+					this.requestVideoFrame();
+
+					// update CV fps
+					updateCVFPS();
+				} //end handleVisionDone()
+				
+
+				// Creates a box used to indicate the location of an anchor offset
+				_createSceneGraphNode(scale, yaw, label){
+					let group = new THREE.Group()
+					
+					if (!_threeGeometries[label]){ //create the text geometry:
+						_threeGeometries[label]=new THREE.TextGeometry(label,{
+							font: _threeFont,
+							size: 0.3,
+							height: 0.03, //Thickness to extrude text in meters (ie 3cm)
+							curveSegments: 8,
+							bevelEnabled: false
+						});
+
+						//center the geometry along X and Z axis (horizontal) and align it to 0 along Y
+						_threeGeometries[label].center();
+						_threeGeometries[label].computeBoundingBox();
+						const dy=-_threeGeometries[label].boundingBox.min.y;
+						_threeGeometries[label].applyMatrix( new THREE.Matrix4().makeTranslation(0, dy, 0) );
+					}
+					const mesh=new THREE.Mesh(_threeGeometries[label], _threeDebugMaterial);
+
+					//rotate and scale
+					mesh.rotateY(yaw)
+					mesh.scale.multiplyScalar(scale)
+
+					group.add(mesh)
+					return group
+				}
+			} //end class JeelizARDemo
+
+			window.addEventListener('DOMContentLoaded', () => {
+				setTimeout(() => {
+					try {
+						window.pageApp = new JeelizARDemo(document.getElementById('target'))
+					} catch(e) {
+						console.error('page error', e)
+					}
+				}, 1000)
+			})
+		</script>
+	</body>
+</html>
