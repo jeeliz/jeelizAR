@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href='https://www.youtube.com/watch?v=9klHhWxZHoc'><img src='https://img.youtube.com/vi/9klHhWxZHoc/0.jpg'></a>
-<i>Demonstration of this library: WebXR Coffee. The tea cup is detected and a 3D animation is played in augmented reality.</i>
+<i>Demonstration of this library: WebXR Coffee.<br/>The tea cup is detected and a 3D animation is played in augmented reality.</i>
 </p>
 
 
@@ -208,9 +208,12 @@ Be careful to enable gzip compression for at least JSON files. The neuron networ
 ## Neural network models
 We provide several neural network models in the [/neuralNets/](/neuralNets/) path. We will regularly add new neural networks in this Git repository. We can also provide specific neural network training services. Please [contact us here](https://jeeliz.com/contact-us/) for pricing and details. You can find here:
 
-* `basic4.json`: This neural network detects 4 objects : mug or coffee cup, a bike, a laptop and a chair,
-* `basic4Light.json`: Same than `basic4.json` but lighter
+| model file    		 | detected labels 			 | input size 	| detection cost | reliability |
+| :---         			 | :---        				 | :---         |     :---:      |     :---:   |
+| `basic4.json`   		 | CUP,CHAIR,BICYCLE,LAPTOP  |  128*128px   | **			 |     **      |
+| `basic4Light.json`     | CUP,CHAIR,BICYCLE,LAPTOP  |  64*64px     | *				 |      *      |
 
+The input size is the resolution of the input image of the network. The detection window is not static: it slides along the video both for position and scale. If you use this library with WebXR and IOS, the video resolution will be `480*270` pixels, so a `64*64` pixels input will be enough. If for example you used a `128*128` pixels input neural network model, the input image would often need to be enlarged before being given as input.
 
 
 ## About the tech
