@@ -4,6 +4,7 @@
 
 <p align="center">
 <a href='https://www.youtube.com/watch?v=9klHhWxZHoc'><img src='https://img.youtube.com/vi/9klHhWxZHoc/0.jpg'></a>
+<br/>
 <i>Demonstration of this library: WebXR Coffee.<br/>The tea cup is detected and a 3D animation is played in augmented reality.</i>
 </p>
 
