@@ -39,7 +39,7 @@ Here are the main features of the library :
 
 * object detection
 * webcam video feed capture using a helper
-* on the fly naural network change
+* on the fly neural network change
 * demonstrations with [WebXR](https://blog.mozilla.org/blog/2017/10/20/bringing-mixed-reality-web/) integration
 
 
