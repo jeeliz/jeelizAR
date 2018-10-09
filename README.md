@@ -181,8 +181,8 @@ The detection function returns an object, `detectState`. For optimization purpos
   * `y` is the position on the vertical axis. It goes from `0` (bottom) to `1` (top),
   * `sx` is the scale on the horizontal axis. It goes from `0` (the size is null) to `1` (full size on horizontal axis),
   * `sy` is the scale on the vertical axis. It goes from `0` (null size) to `1` (full size on vertical axis),
-* `<float> yaw`: the angle in radian of the rotation of the object around the vertical (Y) axis.
-
+* `<float> yaw`: the angle in radian of the rotation of the object around the vertical (Y) axis,
+* `<float> detectScore`: detection score of the detected object, between `0` (bad detection) and `1` (very good detection).
 
 ### Other methods
 * `JEEARAPI.set_NN(<string> neuralNetworkPath, <function> callback)`: switches the neural network, and call a function when it is finished, either with `false` as argument or with an error label,
