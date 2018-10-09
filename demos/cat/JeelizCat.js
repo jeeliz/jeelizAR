@@ -24,7 +24,7 @@ const JeelizCat=(function(){
 			sweepStepMinPx: 2, //minimum size of a step in pixels
 			sweepShuffle: false //true,
 		},
-		trackingFactor: 2.0,
+		trackingFactors: [2.0,2.0,1.0],
 		thresholdDetectFactorUnstitch: 0.72,
 		shrinkMarkerFactor: 0.7,
 
@@ -52,7 +52,7 @@ const JeelizCat=(function(){
 		thresholdDetectFactor: _settings.thresholdDetectFactor,
 		isSkipConfirmation: true,
 		isKeepTracking: true,
-		trackingFactor: _settings.trackingFactor,
+		trackingFactors: _settings.trackingFactors,
 		thresholdDetectFactorUnstitch: _settings.thresholdDetectFactorUnstitch
 	};
 

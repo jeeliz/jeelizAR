@@ -170,7 +170,7 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
     * `IOS`: value optimized of IOS devices for WebXR usage only. Copy the red channel into the other color channels and apply a 5 pixels median filter.
   * `<boolean> isSkipConfirmation`: makes detection easier (more sensitive) but can trigger more false positives. Default: `false`,
   * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
-  * `<float> trackingFactor`: tracking sensitivity. Default: `1.0`,
+  * `[<float>,<float>,<float>] trackingFactors`: tracking sensitivity for translation along X,Y axis and scale. Default: `1.0`,
   * `<float> thresholdDetectFactorUnstitch`: stop tracking if detection threshold is below this value. Used only if `isKeepTracking=true`. Should be smaller than `thresholdDetectFactor`.
 
 The detection function returns an object, `detectState`. For optimization purpose it is assigned by reference, not by value. It is a dictionary with these properties:
