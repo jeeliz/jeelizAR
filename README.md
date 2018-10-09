@@ -21,6 +21,7 @@
   * [Initialization arguments](#initialization-arguments)
   * [The Detection function](#the-detection-function)
   * [Other methods](#other-methods)
+  * [Scan settings](#scan-settings)
   * [WebXR integration](#webxr-integration)
   * [Error codes](#error-codes)
   * [Hosting](#hosting)
@@ -35,7 +36,7 @@
 
 ## Features
 
-Here are the main features of the library :
+Here are the main features of the library:
 
 * object detection
 * webcam video feed capture using a helper
@@ -54,10 +55,11 @@ Here are the main features of the library :
 
 
 ## Demonstrations
-These are some demonstrations of this library :
+These are some demonstrations of this library:
 * Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
 * WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
 * WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/)
+* Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com)): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/)
 
 To run the WebXR demonstration, you need a browser where WebXR is implemented. We hope it will be implemented soon in all web browsers! 
 * If you have and IOS device (Ipad, Iphone), you can install [WebXR viewer](https://itunes.apple.com/us/app/webxr-viewer/id1295998056?mt=8) from the Apple store. It is developped by the Mozilla Fundation. It is a modified Firefox with WebXR implemented using ArKit. You can then open the demonstrations from the URL bar of the application.
@@ -126,7 +128,7 @@ The function `load_neuralNet` loads the neural network model:
 function load_neuralNet(){
   JEEARAPI.set_NN('../../neuralNets/basic4.json', function(errLabel){
     if (errLabel){
-      console.log('ERROR : cannot load the neural net', errLabel);
+      console.log('ERROR: cannot load the neural net', errLabel);
     } else {
       iterate();
     }
@@ -148,21 +150,28 @@ function iterate(){
 
 ### Initialization arguments
 The `JEEARAPI.init` takes a dictionary as argument with these properties:
-* `video`: HTML5 video element (can come from the MediaStream API helper). If `false`, update the source texture from a `videoFrameBuffer object` provided when calling `JEEARAPI.detect(...)` (like in WebXR demos),
-* `callbackReady`: callback function launched when ready or if there was an error. Called with the error label or `false`,
-* `canvasId` : id of the canvas from which the WebGL context used for deep learning processing will be created. It can also be directly a `<canvas>` element,
-* `isDebugRender`: Boolean. If true, a debug rendering will be displayed on the `<canvas>` element. Useful for debugging, but it should be set to `false` for production because it wastes GPU computing resources.
+* `<video> video`: HTML5 video element (can come from the MediaStream API helper). If `false`, update the source texture from a `videoFrameBuffer object` provided when calling `JEEARAPI.detect(...)` (like in WebXR demos),
+* `<function> callbackReady`: callback function launched when ready or if there was an error. Called with the error label or `false`,
+* `<string> canvasId`: id of the canvas from which the WebGL context used for deep learning processing will be created,
+* `<canvas> canvas`: if `canvasId` is not provided, you can also provide directly the `<canvas>` element
+* `<dict> scanSettings`: see [Scan settings section](scan-settings) for more details
+* `<boolean> isDebugRender`: Boolean. If true, a debug rendering will be displayed on the `<canvas>` element. Useful for debugging, but it should be set to `false` for production because it wastes GPU computing resources,
+* `<int> canvasSize`: size of the detection canvas in pixels (should be square). Special value `-1` keep the canvas size. Default: `512`.
 
 
 ### The Detection function
 The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPerLoop, <videoFrame>frame, <dictionary>options)`.
 * `<int> nDetectionPerLoop` is the number of consecutive detections proceeded. The higher it is, the faster the detection will be. But it may slow down the whole application if it is too high because the function call will consume too much GPU resources. A value between `3` and `6` is advised.
-* `<videoFrame> frame` is used only with WebXR demos (see [WebXR integration section](#webxr-integration)),
+* `<videoFrame> frame` is used only with WebXR demos (see [WebXR integration section](#webxr-integration)). Otherwise set it to `null`,
 * `<dictionary> options` is an optional dictionary which can have these properties:
   * `<float> thresholdDetectFactor`: a factor applied on the detection thresholds for the detected object. The default value is `1`. For example if it equals `0.5`, the detection will be 2 times easier.
-  * `<string> cutShader`: can tweak the default shader used to crop the video area. The possible values are:
+  * `<string> cutShader`: can tweak the default shader used to crop the video area. This option is only available for WebXR demos. The possible values are:
     * `null`: default value, does not apply a filter and keep RGBA channels,
     * `IOS`: value optimized of IOS devices for WebXR usage only. Copy the red channel into the other color channels and apply a 5 pixels median filter.
+  * `<boolean> isSkipConfirmation`: makes detection easier (more sensitive) but can trigger more false positives. Default: `false`,
+  * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
+  * `<float> trackingFactor`: tracking sensitivity. Default: `1.0`,
+  * `<float> thresholdDetectFactorUnstitch`: stop tracking if detection threshold is below this value. Used only if `isKeepTracking=true`. Should be smaller than `thresholdDetectFactor`.
 
 The detection function returns an object, `detectState`. For optimization purpose it is assigned by reference, not by value. It is a dictionary with these properties:
 * `<float> distance`: learning distance, ie distance between the camera and the object during the training of the dataset. Gives a clue about the real scale of the object,
@@ -176,9 +185,10 @@ The detection function returns an object, `detectState`. For optimization purpos
 
 
 ### Other methods
-* `JEEFITAPI.set_NN(<string> neuralNetworkPath, <function> callback)`: switches the neural network, and call a function when it is finished, either with `false` as argument or with an error label,
-* `JEEFITAPI.reset_state()`: returns to sweep mode,
-* `JEEARAPI.get_aspectRatio()`: returns the aspect ratio `<width>/<height>` of the input source.
+* `JEEARAPI.set_NN(<string> neuralNetworkPath, <function> callback)`: switches the neural network, and call a function when it is finished, either with `false` as argument or with an error label,
+* `JEEARAPI.reset_state()`: returns to sweep mode,
+* `JEEARAPI.get_aspectRatio()`: returns the aspect ratio `<width>/<height>` of the input source,
+* `JEEARAPI.set_scanSettings(<dict> scanSettings)`: see [Scan settings section](#scan-settings) for more informations.
 
 ### WebXR integration
 The WebXR demos principal code is directly in the `index.html` files. The 3D part is handled by *THREE.JS*.
@@ -199,6 +209,22 @@ With the IOS implementation, it handles the video stream conversion (the video s
   * `"INVALID_NN"`: The neural network model is invalid or corrupted,
   * `"NOTFOUND_NN"`: The neural network model is not found, or a HTTP error occured during the request.  
 
+
+### Scan settings
+Scan settings can be provided:
+* At the initialization process, when `JEEARAPI.init` is called, using the parameter `scanSettings`
+* After the initialization, by calling `JEEARAPI.set_scanSettings(<dict> scanSettings)`
+
+The dictionnary `scanSettings` has the following properties:
+* `<float> margins`: margin. Do not try to detect if the center of the detection window is too close to the borders. `0`→ no margin, `1`→ 100% margins. Default: `0.1`,
+* `<int> nSweepXYsteps`: number of translation steps for a given scale. Default: `6*6=36`,
+* `<int> nSweepSsteps`: number of scale steps. Total number of translation steps `=nSweepXYsteps*nSweepSsteps`. Default: `4`,
+* `[<float>,<float>] sweepScaleRange`: range of the detection window scale. 1→ whole window minimum dimension (between width and height). Do not take account of margins. Default: `[0.3, 0.7]`,
+* `<int> sweepStepMinPx`: minimum size of a step in pixels. Default: `16`,
+* `<boolean> sweepShuffle`: if we should shuffle scan positions or not. Default: `true`.
+
+
+
 ### Hosting
 The demonstrations should be hosted on a static HTTPS server with a valid certificate. Otherwise WebXR or MediaStream API may not be available.
 
@@ -206,13 +232,16 @@ Be careful to enable gzip compression for at least JSON files. The neuron networ
 
 
 
+
 ## Neural network models
 We provide several neural network models in the [/neuralNets/](/neuralNets/) path. We will regularly add new neural networks in this Git repository. We can also provide specific neural network training services. Please [contact us here](https://jeeliz.com/contact-us/) for pricing and details. You can find here:
 
-| model file    		 | detected labels 			 | input size 	| detection cost | reliability |
-| :---         			 | :---        				 | :---         |     :---:      |     :---:   |
-| `basic4.json`   		 | CUP,CHAIR,BICYCLE,LAPTOP  |  128*128px   | **			 |     **      |
-| `basic4Light.json`     | CUP,CHAIR,BICYCLE,LAPTOP  |  64*64px     | *				 |      *      |
+| model file    		   | detected labels 			    | input size   | detection cost | reliability | remarks |
+| :---         			   | :---        				      | :---         |     :---:      |     :---:   |  :---   |
+| `basic4.json`   		 | CUP,CHAIR,BICYCLE,LAPTOP |  128*128px   | **			        |     **      |  |
+| `basic4Light.json`   | CUP,CHAIR,BICYCLE,LAPTOP |  64*64px     | *				      |      *      |  |
+| `cat.json`           | CAT                      |  64*64px     | ***            |      ***    | detect cat face  |
+
 
 The input size is the resolution of the input image of the network. The detection window is not static: it slides along the video both for position and scale. If you use this library with WebXR and IOS, the video resolution will be `480*270` pixels, so a `64*64` pixels input will be enough. If for example you used a `128*128` pixels input neural network model, the input image would often need to be enlarged before being given as input.
 

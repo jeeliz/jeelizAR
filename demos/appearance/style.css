@@ -1,4 +1,4 @@
- a {color: #eee; text-decoration: none}
+a {color: #eee; text-decoration: none}
 a:hover {color: blue;}
 
 body {overflow: auto; overflow-y: auto;
@@ -27,4 +27,12 @@ body {overflow: auto; overflow-y: auto;
     width: 100%;
     bottom: 1em;
     background-color: rgba(255,255,255,0.5);
+}
+
+.explanation > a{
+    color: navy;
+}
+.explanation {
+    font-size: 14pt;
+    margin: 12px;
 }

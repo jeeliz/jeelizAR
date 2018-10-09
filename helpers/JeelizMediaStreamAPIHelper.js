@@ -303,11 +303,29 @@ var JeelizMediaStreamAPIHelper={
                             if (vw) video['style']['width']=vw.toString()+'px';
                             if (vh) video['style']['height']=vh.toString()+'px';
 
+
+                            const optionsReturned={
+                                capabilities: null,
+                                settings: null,
+                                mediaStreamTrack: null
+                            };
+                            try {
+                                const mediaStreamTrack = localMediaStream['getVideoTracks']()[0];
+                                if (mediaStreamTrack){
+                                    optionsReturned.mediaStreamTrack=mediaStreamTrack;
+                                    optionsReturned.capabilities = mediaStreamTrack['getCapabilities']();
+                                    optionsReturned.settings = mediaStreamTrack['getSettings']();
+                                }
+                                
+                            } catch(e){
+                                                                console.log('WARNING in JeelizMediaStreamAPIHelper - get_raw(): Image Capture API not found');
+                                                            }
+
                             if (JeelizMediaStreamAPIHelper.check_isIOS()){
                                 document.body.appendChild(video);
                                 JeelizMediaStreamAPIHelper.mute(video);
 
-                                callbackSuccess(video, localMediaStream);
+                                callbackSuccess(video, localMediaStream, optionsReturned);
                                 setTimeout(function(){
                                   video['style']['transform']='scale(0.0001,0.0001)';
                                   video['style']['position']='fixed';
@@ -316,7 +334,7 @@ var JeelizMediaStreamAPIHelper={
                                   JeelizMediaStreamAPIHelper.mute(video);
                                 }, 80);
                             } else {                      
-                                callbackSuccess(video, localMediaStream);
+                                callbackSuccess(video, localMediaStream, optionsReturned);
                             }
                         } else {
                             callbackError('VIDEO_NOTSTARTED');
@@ -469,6 +487,19 @@ var JeelizMediaStreamAPIHelper={
                     console.log('ERROR in JeelizMediaStreamAPIHelper - get_videoDevices() : enumerateDevices promise rejected', err);
                     callback(false, 'PROMISEREJECTED');
         });
-    } //end get_videoDevices()
+    }, //end get_videoDevices()
+
+    //use image capture api
+    //test it with: JeelizMediaStreamAPIHelper.change_setting(debugVideoOptions.mediaStreamTrack, 'exposureCompensation', 3000)
+    change_setting: function(mediaStreamTrack, settingId, settingValue){
+        const constraint={};
+        constraint[settingId]=settingValue;
+        const advancedConstraintsList=[];
+        advancedConstraintsList.push(constraint);
+        mediaStreamTrack['applyConstraints']({ 'advanced': advancedConstraintsList})
+        .catch(function(errMsg){
+                        console.log('ERROR in JeelizMediaStreamAPIHelper - change_setting(): ', errMsg);
+                    });
+    }
 };
 
