@@ -322,6 +322,8 @@ var JeelizMediaStreamAPIHelper={
                                                             }
 
                             if (JeelizMediaStreamAPIHelper.check_isIOS()){
+                            	                            	console.log('WARNING in JeelizMediaStreamAPIHelper - IOS device detected, add the video element to the DOM.');
+                            	
                                 document.body.appendChild(video);
                                 JeelizMediaStreamAPIHelper.mute(video);
 
@@ -332,6 +334,12 @@ var JeelizMediaStreamAPIHelper={
                                   video['style']['bottom']='0px';
                                   video['style']['right']='0px';
                                   JeelizMediaStreamAPIHelper.mute(video);
+
+                                  //from https://github.com/jeeliz/jeelizFaceFilter/issues/45
+                                   setTimeout(function () {
+						               video['play']();
+						           }, 100);
+
                                 }, 80);
                             } else {                      
                                 callbackSuccess(video, localMediaStream, optionsReturned);
