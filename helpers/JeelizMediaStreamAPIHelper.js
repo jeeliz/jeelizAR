@@ -38,7 +38,7 @@ var JeelizMediaStreamAPIHelper={
     },
 
     check_isIOS: function(){ //from https://stackoverflow.com/questions/9038625/detect-if-device-is-ios
-        var iOS = /iPad|iPhone|iPod/.test(navigator['userAgent']) && !window['MSStream'];
+        const iOS = /iPad|iPhone|iPod/.test(navigator['userAgent']) && !window['MSStream'];
         return iOS;
     },
 
@@ -324,24 +324,33 @@ var JeelizMediaStreamAPIHelper={
                             if (JeelizMediaStreamAPIHelper.check_isIOS()){
                             	                            	console.log('WARNING in JeelizMediaStreamAPIHelper - IOS device detected, add the video element to the DOM.');
                             	
-                                document.body.appendChild(video);
-                                JeelizMediaStreamAPIHelper.mute(video);
+                                if (!video['parentNode'] || video['parentNode']===null){
+                                    //append the video to the DOM and makes it invisible
+                                    //if it is not already into the dom
+                                    document['body']['appendChild'](video);
+                                    JeelizMediaStreamAPIHelper.mute(video);
 
-                                callbackSuccess(video, localMediaStream, optionsReturned);
-                                setTimeout(function(){
-                                  video['style']['transform']='scale(0.0001,0.0001)';
-                                  video['style']['position']='fixed';
-                                  video['style']['bottom']='0px';
-                                  video['style']['right']='0px';
-                                  JeelizMediaStreamAPIHelper.mute(video);
+                                    callbackSuccess(video, localMediaStream, optionsReturned);
+                                    setTimeout(function(){
+                                      video['style']['transform']='scale(0.0001,0.0001)';
+                                      video['style']['position']='fixed';
+                                      video['style']['bottom']='0px';
+                                      video['style']['right']='0px';
+                                      JeelizMediaStreamAPIHelper.mute(video);
 
-                                  //from https://github.com/jeeliz/jeelizFaceFilter/issues/45
-                                   setTimeout(function () {
-						               video['play']();
-						           }, 100);
+                                      //from https://github.com/jeeliz/jeelizFaceFilter/issues/45
+                                       setTimeout(function () {
+    						               video['play']();
+    						           }, 100);
 
-                                }, 80);
-                            } else {                      
+                                    }, 80);
+                                } else {
+                                    callbackSuccess(video, localMediaStream, optionsReturned);
+                                    setTimeout(function () {
+                                       video['play']();
+                                    }, 100);
+                                }
+                            } else { //not IOS                      
                                 callbackSuccess(video, localMediaStream, optionsReturned);
                             }
                         } else {
