@@ -21,6 +21,7 @@
   * [Initialization arguments](#initialization-arguments)
   * [The Detection function](#the-detection-function)
   * [Other methods](#other-methods)
+  * [Video crop](#video-crop)
   * [Scan settings](#scan-settings)
   * [WebXR integration](#webxr-integration)
   * [Error codes](#error-codes)
@@ -151,6 +152,7 @@ function iterate(){
 ### Initialization arguments
 The `JEEARAPI.init` takes a dictionary as argument with these properties:
 * `<video> video`: HTML5 video element (can come from the MediaStream API helper). If `false`, update the source texture from a `videoFrameBuffer object` provided when calling `JEEARAPI.detect(...)` (like in WebXR demos),
+* `<dict> videoCrop`: see [Video crop section](video-crop) for more details
 * `<function> callbackReady`: callback function launched when ready or if there was an error. Called with the error label or `false`,
 * `<string> canvasId`: id of the canvas from which the WebGL context used for deep learning processing will be created,
 * `<canvas> canvas`: if `canvasId` is not provided, you can also provide directly the `<canvas>` element
@@ -208,6 +210,20 @@ With the IOS implementation, it handles the video stream conversion (the video s
 * Neural network loading errors (returned by `JEEARAPI.set_NN` callback function):
   * `"INVALID_NN"`: The neural network model is invalid or corrupted,
   * `"NOTFOUND_NN"`: The neural network model is not found, or a HTTP error occured during the request.  
+
+
+
+### Video crop
+The video crop parameters can be provided. It works only if the input element is a `<video>` element. By default, there is no video cropping (the whole video image is taken as input). The video crop settings can be provided:
+* At the initialization process,  when `JEEARAPI.init` is called, using the parameter `videoCrop`,
+* After the initialization, by calling `JEEARAPI.set_videoCrop(<dict> videoCrop)`
+
+The dictionnary `videoCrop` is either false (no videoCrop), or has the following parameters:
+* `<int> x`: horizontal position of the lower left corner of the cropped area, in pixels,
+* `<int> y`: vertical position of lower left corner of the cropped area, in pixels,
+* `<int> w`: width of the cropped area, in pixels,
+* `<int> h`: height of the cropped area, in pixels.
+
 
 
 ### Scan settings
