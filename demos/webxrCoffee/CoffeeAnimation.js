@@ -52,7 +52,7 @@ const CoffeeAnimation=(function(){
 	}
 
 	function init_particle( particle, delay ) {
-		const particle = this instanceof THREE.Sprite ? this : particle;
+		var particle = this instanceof THREE.Sprite ? this : particle;
 		if (_state!==_states.potFlowing){
 			particle.visible=false;
 			return;

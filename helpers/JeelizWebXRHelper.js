@@ -27,7 +27,7 @@ const JeelizWebXRHelper=(function(){
 
 
 	//private vars:
-	var _states={
+	const _states={
 	    notLoaded : -1,
 	    loading: 0,
 	    idle: 1,
@@ -39,12 +39,12 @@ const JeelizWebXRHelper=(function(){
 	var _nDetections=2;
 	var _scaleFactor=_settings.scaleFactor;
 	var _visionDoneCallback=false;
-	var _pose={
+	const _pose={
 		x:0,y:0,
 		yaw:0,
 		scale:1
 	};
-	var _iOSvideoBuffer={
+	const _iOSvideoBuffer={
 		isInitialized: false,
 		rgba32: {
 			size: {
@@ -53,7 +53,7 @@ const JeelizWebXRHelper=(function(){
 			buffer: null
 		}
 	};
-	var _detectOptions={
+	const _detectOptions={
 		cutShader: false
 	};
 	var _IOSthresholdDetectFactor=1;
@@ -319,7 +319,7 @@ const JeelizWebXRHelper=(function(){
 		},
 
 		extract_lookUpDownAngleFromVector: function(threeVector){//0 -> vector is horizontally, PI/2 -> point to down
-			var eulerX=angleMod(Math.acos(threeVector.y)-Math.PI/2); 
+			const eulerX=angleMod(Math.acos(threeVector.y)-Math.PI/2.0); 
 			return eulerX;
 		},
 
