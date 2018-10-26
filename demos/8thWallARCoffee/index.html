@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.75, user-scalable=yes">
+    <title>AR Coffee</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+
+    <!-- THREE.js must be supplied -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js"></script> -->
+    <script src="../../libs/threejs/v95/three.min.js"></script>
+
+    <!-- 8thWall Web - Replace the app key here with your own app key -->
+    <!-- ARCoffee key (from WEB APPS tab) -->
+    <script defer src="https://apps.8thwall.com/xrweb" appKey="<WEBAPPKEY>"></script>
+
+    <!-- JEELIZ AR script -->
+    <script src="https://appstatic.jeeliz.com/JEEAR/JEEARNNC.js"></script>
+
+    <!-- THREE.JS coffee animation scene creator and its dependancies -->
+    <script src="../../libs/tween/tween.min.js"></script>
+    <script src="../../libs/threejs/v95/TeapotBufferGeometry.js"></script>
+    <script src="animation/CoffeeAnimation.js"></script>
+
+    <!-- JeelizAR helper -->
+    <script src="../../helpers/JeelizAR8thWallHelper.js"></script>
+
+    <!-- client code -->
+    <script defer src="index.js"></script>
+  </head>
+
+  <body>
+    <!-- The AR canvas -->
+    <canvas id="xrweb" width="480" height="640" />
+
+    <!-- A button to pause the camera feed. -->
+    <div style="width: 480px;">
+      <button id="pause" style="float: right;">PAUSE</button>
+    </div>
+  </body>
+</html>

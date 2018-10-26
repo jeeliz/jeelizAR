@@ -56,15 +56,35 @@ Here are the main features of the library:
 
 
 ## Demonstrations
-These are some demonstrations of this library:
-* Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
-* WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
-* WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/)
-* Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com)): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/)
+These are some demonstrations of this library. Some requires a specific setup.
 
-To run the WebXR demonstration, you need a browser where WebXR is implemented. We hope it will be implemented soon in all web browsers! 
+### Standard browser demos
+These demonstration should work in your browser if you have a webcam.
+
+* Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
+* Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com) for desktop computers only): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/) [Youtube video](https://www.youtube.com/watch?v=MqvweemM_-I)
+
+### WebXR viewer demos
+To run these demonstrations, you need a web browser implementing WebXR. We hope it will be implemented soon in all web browsers! 
 * If you have and IOS device (Ipad, Iphone), you can install [WebXR viewer](https://itunes.apple.com/us/app/webxr-viewer/id1295998056?mt=8) from the Apple store. It is developped by the Mozilla Fundation. It is a modified Firefox with WebXR implemented using ArKit. You can then open the demonstrations from the URL bar of the application.
 * For Android devices, it should work with [WebARonARCore](https://github.com/google-ar/WebARonARCore), but we have not tested yet.
+
+Then you can run these demos:
+* WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
+* WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/) [Youtube video](https://www.youtube.com/watch?v=9klHhWxZHoc)
+
+
+### 8th Wall demos
+These demos run in a standard web browser on mobile or tablet. They rely on the amazing [8th Wall AR engine](https://8thwall.com/). We use the web version of the engine and we started from the THREE.JS web sample. The web engine is not released publicly yet, so you need to:
+* host this repository using a local HTTPS server,
+* get an API key for the web SDK from 8th wall (subscribe and ask for an access),
+* write the key in the `index.html` of the demo you want to try (search and replace `<WEBAPPKEY>` by your real key),
+* you need to validate the specific device using a QR code or a link (it is very well explained in the 8th wall *get started* document).
+
+The demo:
+* AR Coffee: [source code](/demos/8thWallARCoffee/) [Youtube video](https://www.youtube.com/watch?v=3j7uB4-063w)
+
+
 
 
 You can subscribe to the [Jeeliz Youtube channel](https://www.youtube.com/channel/UC3XmXH1T3d1XFyOhrRiiUeA) or to the [@StartupJeeliz Twitter account](https://twitter.com/StartupJeeliz) to be kept informed of our cutting edge developments.
