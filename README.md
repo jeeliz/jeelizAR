@@ -16,6 +16,9 @@
 * [Features](#features)
 * [Architecture](#architecture)
 * [Demonstrations](#demonstrations)
+  * [Standard browser demos](#standard-browser-demos)
+  * [WebXR viewer demos](#webxr-viewer-demos)
+  * [8thWall demos](#8thWall-demos)
 * [Specifications](#specifications)
   * [Get started](#get-started)
   * [Initialization arguments](#initialization-arguments)
@@ -58,6 +61,11 @@ Here are the main features of the library:
 ## Demonstrations
 These are some demonstrations of this library. Some requires a specific setup.
 
+You can subscribe to the [Jeeliz Youtube channel](https://www.youtube.com/channel/UC3XmXH1T3d1XFyOhrRiiUeA) or to the [@StartupJeeliz Twitter account](https://twitter.com/StartupJeeliz) to be kept informed of our cutting edge developments.
+
+If you have made an application or a fun demonstration using this library, we would love to see it and insert a link here! Contact us on [Twitter @StartupJeeliz](https://twitter.com/StartupJeeliz) or [LinkedIn](https://www.linkedin.com/company/jeeliz).
+
+
 ### Standard browser demos
 These demonstration should work in your browser if you have a webcam.
 
@@ -74,7 +82,7 @@ Then you can run these demos:
 * WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/) [Youtube video](https://www.youtube.com/watch?v=9klHhWxZHoc)
 
 
-### 8th Wall demos
+### 8thWall demos
 These demos run in a standard web browser on mobile or tablet. They rely on the amazing [8th Wall AR engine](https://8thwall.com/). We use the web version of the engine and we started from the THREE.JS web sample. The web engine is not released publicly yet, so you need to:
 * host this repository using a local HTTPS server,
 * get an API key for the web SDK from 8th wall (subscribe and ask for an access),
@@ -83,13 +91,6 @@ These demos run in a standard web browser on mobile or tablet. They rely on the 
 
 The demo:
 * AR Coffee: [source code](/demos/8thWallARCoffee/) [Youtube video](https://www.youtube.com/watch?v=3j7uB4-063w)
-
-
-
-
-You can subscribe to the [Jeeliz Youtube channel](https://www.youtube.com/channel/UC3XmXH1T3d1XFyOhrRiiUeA) or to the [@StartupJeeliz Twitter account](https://twitter.com/StartupJeeliz) to be kept informed of our cutting edge developments.
-
-If you have made an application or a fun demonstration using this library, we would love to see it and insert a link here! Contact us on [Twitter @StartupJeeliz](https://twitter.com/StartupJeeliz) or [LinkedIn](https://www.linkedin.com/company/jeeliz).
 
 
 ## Specifications
