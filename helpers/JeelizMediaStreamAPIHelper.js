@@ -20,7 +20,7 @@
 var JeelizMediaStreamAPIHelper={
     get_videoElement: function() {
         if (!JeelizMediaStreamAPIHelper.compat()) return false;
-        var vid=document.createElement("video");
+        const vid=document.createElement("video");
         return vid;
     },
 
@@ -54,10 +54,14 @@ var JeelizMediaStreamAPIHelper={
         }
     },
 
+    check_isApple: function(){
+        return JeelizMediaStreamAPIHelper.check_isSafari() || JeelizMediaStreamAPIHelper.check_isIOS();
+    },
+
     check_isSafari: function(){ //https://stackoverflow.com/questions/7944460/detect-safari-browser
         var ua = navigator['userAgent'].toLowerCase(); 
-        if (ua.indexOf('safari') != -1) { 
-          if (ua.indexOf('chrome') > -1) {
+        if (ua.indexOf('safari') !== -1) { 
+          if (ua.indexOf('chrome') !== -1) {
             return false;
           } else {
             return true;
@@ -158,7 +162,7 @@ var JeelizMediaStreamAPIHelper={
         }
 
         var get_closerResolutions=function(s){
-            var standardResolutions=[480, 576, 640, 648, 720, 768, 800, 960, 1080, 1152, 1280, 1366, 1920];
+            const standardResolutions=[480, 576, 640, 648, 720, 768, 800, 960, 1080, 1152, 1280, 1366, 1920];
             return standardResolutions.sort(function(sa, sb){
                 return (Math.abs(sa-s)-Math.abs(sb-s));
             });
@@ -338,8 +342,8 @@ var JeelizMediaStreamAPIHelper={
                                                                 console.log('WARNING in JeelizMediaStreamAPIHelper - get_raw(): Image Capture API not found');
                                                             }
 
-                            if (JeelizMediaStreamAPIHelper.check_isIOS()){
-                            	                            	console.log('WARNING in JeelizMediaStreamAPIHelper - IOS device detected, add the video element to the DOM.');
+                            if (JeelizMediaStreamAPIHelper.check_isApple()){
+                            	                            	console.log('WARNING in JeelizMediaStreamAPIHelper - Apple device detected, add the video element to the DOM.');
                             	
                                 if (!video['parentNode'] || video['parentNode']===null){
                                     //append the video to the DOM and makes it invisible
@@ -458,7 +462,8 @@ var JeelizMediaStreamAPIHelper={
                 //because if we are in portrait mode the video will be in portrait mode too
                 JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
             } //end if mobile
-                        //see https://stackoverflow.com/questions/45692526/ios-11-getusermedia-not-working
+
+            //see https://stackoverflow.com/questions/45692526/ios-11-getusermedia-not-working:
             if (mandatory['video']['width'] && mandatory['video']['width']['ideal']){
                 video['style']['width']=mandatory['video']['width']['ideal']+'px';
             }
