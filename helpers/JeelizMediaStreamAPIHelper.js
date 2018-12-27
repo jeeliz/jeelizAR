@@ -38,8 +38,8 @@ var JeelizMediaStreamAPIHelper={
     },
 
     check_isIOS: function(){ //from https://stackoverflow.com/questions/9038625/detect-if-device-is-ios
-        const iOS = /iPad|iPhone|iPod/.test(navigator['userAgent']) && !window['MSStream'];
-        return iOS;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator['userAgent']) && !window['MSStream'];
+        return isIOS;
     },
 
     is_portrait: function(){ //https://stackoverflow.com/questions/4917664/detect-viewport-orientation-if-orientation-is-portrait-display-alert-message-ad
@@ -104,8 +104,8 @@ var JeelizMediaStreamAPIHelper={
         var videoConstraints=false;
         if (constraints['video']){
 
-            var clone_sizeConstraint=function(sizeConstraint){
-                var cst={};
+            const clone_sizeConstraint=function(sizeConstraint){
+                const cst={};
                 if (typeof(sizeConstraint['min'])!=='undefined'){
                     cst['min']=sizeConstraint['min'];
                 }
@@ -130,7 +130,7 @@ var JeelizMediaStreamAPIHelper={
             }
         }
 
-        var constraintsCloned={
+        const constraintsCloned={
             'audio': constraints['audio'],
             'video' : videoConstraints
         };
@@ -142,7 +142,7 @@ var JeelizMediaStreamAPIHelper={
     }, //end clone_constraints()
 
     switch_widthHeight: function(constraints){
-        var mvw=constraints['video']['width'];
+        const mvw=constraints['video']['width'];
         constraints['video']['width']=constraints['video']['height'];
         constraints['video']['height']=mvw;
         return constraints;
@@ -150,18 +150,18 @@ var JeelizMediaStreamAPIHelper={
 
     create_fallbackConstraints: function(constraints){
         //return an array of constraints to test
-        var fallbackConstraints=[];
+        const fallbackConstraints=[];
 
         if (!constraints || !constraints['video']) {
             return fallbackConstraints;
         }
 
-        var add_constraintsTryon=function(constraintConstructor){
+        const add_constraintsTryon=function(constraintConstructor){
             var newConstraints=JeelizMediaStreamAPIHelper.clone_constraints(constraints);
             fallbackConstraints.push(constraintConstructor(newConstraints));
         }
 
-        var get_closerResolutions=function(s){
+        const get_closerResolutions=function(s){
             const standardResolutions=[480, 576, 640, 648, 720, 768, 800, 960, 1080, 1152, 1280, 1366, 1920];
             return standardResolutions.sort(function(sa, sb){
                 return (Math.abs(sa-s)-Math.abs(sb-s));
@@ -169,11 +169,11 @@ var JeelizMediaStreamAPIHelper={
         }
 
 
+        //try with constraints which are near the requested ones:
         if (constraints['video']['width'] && constraints['video']['height']){
-            //try with constraints which are near the requested ones
             if (constraints['video']['width']['ideal'] && constraints['video']['height']['ideal']){
-                var idealWidths= get_closerResolutions(constraints['video']['width']['ideal']).slice(0,3);
-                var idealHeights=get_closerResolutions(constraints['video']['height']['ideal']).slice(0,3);
+                const idealWidths= get_closerResolutions(constraints['video']['width']['ideal']).slice(0,3);
+                const idealHeights=get_closerResolutions(constraints['video']['height']['ideal']).slice(0,3);
                 for (var iw=0, w; iw<idealWidths.length; ++iw){
                     w=idealWidths[iw];
                     for (var ih=0, h; ih<idealHeights.length; ++ih){
@@ -181,7 +181,7 @@ var JeelizMediaStreamAPIHelper={
                         if (w===constraints['video']['width']['ideal'] && h===constraints['video']['height']['ideal']){
                             continue; //already tried first !
                         }
-                        var aspectRatio=Math.max(w,h)/Math.min(w,h), tol=0.1;
+                        const aspectRatio=Math.max(w,h)/Math.min(w,h), tol=0.1;
                         if (aspectRatio<4/3-tol || aspectRatio>16/9+tol){
                             continue;
                         }
@@ -199,20 +199,8 @@ var JeelizMediaStreamAPIHelper={
                 return JeelizMediaStreamAPIHelper.switch_widthHeight(newConstraints);
             });
         }
-        if (constraints['video']['facingMode']){
-            add_constraintsTryon(function(newConstraints){
-                delete(newConstraints['video']['facingMode']);
-                return newConstraints;
-            });
-            
-            if (constraints['video']['width'] && constraints['video']['height']){
-                add_constraintsTryon(function(newConstraints){
-                    JeelizMediaStreamAPIHelper.switch_widthHeight(newConstraints);
-                    delete(newConstraints['video']['facingMode']);
-                    return newConstraints;
-                });
-            }
-        }
+
+        //delete width and height informations:
         if (constraints['video']['width'] && constraints['video']['height']){
             if (constraints['video']['width']['ideal'] && constraints['video']['height']['ideal']){
                 add_constraintsTryon(function(newConstraints){
@@ -229,6 +217,22 @@ var JeelizMediaStreamAPIHelper={
             });
         }
 
+        //remove the facingMode:
+        if (constraints['video']['facingMode']){
+            add_constraintsTryon(function(newConstraints){
+                delete(newConstraints['video']['facingMode']);
+                return newConstraints;
+            });
+            
+            if (constraints['video']['width'] && constraints['video']['height']){
+                add_constraintsTryon(function(newConstraints){
+                    JeelizMediaStreamAPIHelper.switch_widthHeight(newConstraints);
+                    delete(newConstraints['video']['facingMode']);
+                    return newConstraints;
+                });
+            }
+        }
+
         fallbackConstraints.push({
             'audio': constraints['audio'],
             'video': true
@@ -242,8 +246,8 @@ var JeelizMediaStreamAPIHelper={
             if (!mandatory || !mandatory['video']){
                 return false;
             }
-            var mandatoryVideoWidth=mandatory['video']['width'];
-            var mandatoryVideoHeight=mandatory['video']['height'];
+            const mandatoryVideoWidth=mandatory['video']['width'];
+            const mandatoryVideoHeight=mandatory['video']['height'];
             if (!mandatoryVideoWidth || !mandatoryVideoHeight){
                 return false;
             }
@@ -460,7 +464,8 @@ var JeelizMediaStreamAPIHelper={
                 
                 //switch width and height video constraint if mobile portrait mode :
                 //because if we are in portrait mode the video will be in portrait mode too
-                JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
+                //should not do that on Android/Sony Xperia. cf https://github.com/jeeliz/jeelizFaceFilter/issues/65
+                //JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
             } //end if mobile
 
             //see https://stackoverflow.com/questions/45692526/ios-11-getusermedia-not-working:
