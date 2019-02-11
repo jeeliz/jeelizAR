@@ -155,9 +155,11 @@ function load_neuralNet(){
     } else {
       iterate();
     }
-  });
+  }, options);
 }
 ```
+Instead of giving the URL of the neural network, you can also give the parsed JSON object.
+
 
 The function `iterate` starts the iteration loop:
 
