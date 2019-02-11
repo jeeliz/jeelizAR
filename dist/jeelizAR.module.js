@@ -1,22 +1,4 @@
- /**
- * Jeeliz AR - https://github.com/jeeliz/jeelizAR
- *
- * Copyright 2018 Jeeliz ( https://jeeliz.com )
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
-*/
-
-var JEEARAPI=(function(){function ia(a,c,d){var g=new XMLHttpRequest;g.open("GET",a,!0);g.withCredentials=!1;g.onreadystatechange=function(){4===g.readyState&&(200===g.status?c(g.responseText):"undefined"!==typeof d&&d(g.status))};g.send()}
+function ia(a,c,d){var g=new XMLHttpRequest;g.open("GET",a,!0);g.withCredentials=!1;g.onreadystatechange=function(){4===g.readyState&&(200===g.status?c(g.responseText):"undefined"!==typeof d&&d(g.status))};g.send()}
 function ja(a){switch(a){case "relu":return"gl_FragColor=max(vec4(0.,0.,0.,0.),gl_FragColor);";case "elu":return"gl_FragColor=mix(exp(-abs(gl_FragColor))-vec4(1.,1.,1.,1.),gl_FragColor,step(0.,gl_FragColor));";case "elu01":return"gl_FragColor=mix(0.1*exp(-abs(gl_FragColor))-vec4(0.1,0.1,0.1,0.1),gl_FragColor,step(0.,gl_FragColor));";case "arctan":return"gl_FragColor=atan(3.14159265359*texture2D(u0,vUV))/3.14159265359;";case "copy":return"";default:return!1}}
 function ma(a,c){var d=c%8;return a[(c-d)/8]>>7-d&1}
 function pa(a){var c=JSON.parse(a);a=c.ne;var d=c.nf,g=c.n,h="undefined"===typeof btoa?Buffer.from(c.data,"base64").toString("latin1"):atob(c.data),e=h.length,l;c=new Uint8Array(e);for(l=0;l<e;++l)c[l]=h.charCodeAt(l);h=new Float32Array(g);e=new Float32Array(d);l=a+d+1;var k,r;for(k=0;k<g;++k){var f=l*k;var p=0===ma(c,f)?1:-1;var t=f+1;var w=1,A=0;for(r=t+a-1;r>=t;--r)A+=w*ma(c,r),w*=2;r=A;t=c;w=f+1+a;A=e;var F=0,D=A.length;for(f=w;f<w+D;++f)A[F]=ma(t,f),++F;for(f=t=0;f<d;++f)t+=e[f]*Math.pow(2,-f-
@@ -123,4 +105,4 @@ typeof d?{}:d;sa="undefined"===typeof c.ec?1:c.ec;c=a.labels;var f="undefined"==
 Db:w,Yb:{here:p+r*U,notHere:p+(r+1)*U,yaw:p+(r+2)*U,dx:p+(r+3)*U,dy:p+(r+4)*U,ds:p+(r+5)*U}}}V=g;e(!1)},function(){e("NOTFOUND_NN")})}},reset_state:function(){R=0;K=z.Z},detect:function(d,e,f){if(K===z.LOADING||0!==L)return O;B.N();O.label=!1;"undefined"!==typeof f&&(I=f.thresholdDetectFactor?f.thresholdDetectFactor:1,x=f.thresholdDetectFactorUnstitch?f.thresholdDetectFactorUnstitch:1,v=f.isSkipConfirmation?!0:!1,ha=f.isKeepTracking?!0:!1,ea=f.trackingFactors?f.trackingFactors:ea);if(0===P)a.refresh();
 else if(1===P){if(!c){m.width=e.size.width;m.height=e.size.height;switch(f.cutShader){case "IOS":m.wa="s49";n.H("s49",[{name:"u7",type:"2f",value:[1/m.width,1/m.height]}]);break;default:m.wa="s47"}G(null);D()}a.uc(e.buffer)}d=d?d:u.bc;for(e=0;e<d;++e)q.Y.F(),n.set(m.wa),a.b(0),n.oa("u35",q.j),H.i(!1,!1),q.Y.b(0),Q.B(!1,q.Y),B.N();B.tc();ba&&(b.viewport(0,0,N.width,N.height),n.set("s48"),a.b(0),n.oa("u35",q.j),H.i(!1,!1),S&&b.commit?b.commit():b.flush());return O},get_aspectRatio:function(){return m.width/
 m.height},set_scanSettings:function(a){h(y,a);D()},set_videoCrop:function(a){e(a);l()}};return ta}();
-;return JEEARAPI;})();
+;if(typeof(module)!=='undefined'){module.exports=JEEARAPI;}
