@@ -183,6 +183,8 @@ The `JEEARAPI.init` takes a dictionary as argument with these properties:
 * `<dict> scanSettings`: see [Scan settings section](scan-settings) for more details
 * `<boolean> isDebugRender`: Boolean. If true, a debug rendering will be displayed on the `<canvas>` element. Useful for debugging, but it should be set to `false` for production because it wastes GPU computing resources,
 * `<int> canvasSize`: size of the detection canvas in pixels (should be square). Special value `-1` keep the canvas size. Default: `512`.
+* `<boolean> followZRot`: only works with neural network models outputing pitch, roll and yaw angles. Crop the input window using the roll of the current detection during the tracking stage,
+* `[<float>, <float>] ZRotRange`: only works if `followZRot = true`. Randomize initial rotation angle. Values are in radians. Default: `[0,0]`.
 
 
 ### The Detection function
