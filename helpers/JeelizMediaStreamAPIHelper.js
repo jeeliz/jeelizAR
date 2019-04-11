@@ -42,6 +42,12 @@ var JeelizMediaStreamAPIHelper={
         return isIOS;
     },
 
+    get_IOSVersion: function(){ //from https://stackoverflow.com/questions/8348139/detect-ios-version-less-than-5-with-javascript
+        // added on 2019-04-11 for a tweak for IOS>=12.2
+        const v = (navigator['appVersion']).match(/OS (\d+)_(\d+)_?(\d+)?/);
+        return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+    },
+
     is_portrait: function(){ //https://stackoverflow.com/questions/4917664/detect-viewport-orientation-if-orientation-is-portrait-display-alert-message-ad
         try{
             if (window['matchMedia']("(orientation: portrait)")['matches']){
@@ -457,16 +463,18 @@ var JeelizMediaStreamAPIHelper={
                 
                 //switch width and height video constraint if mobile portrait mode :
                 //because if we are in portrait mode the video will be in portrait mode too
-                JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
-
-            } else if (JeelizMediaStreamAPIHelper.check_isMobile()){
-                                console.log('INFO in JeelizMediaStreamAPIHelper() - get() : isMobile but not iOS');
                 
-                //switch width and height video constraint if mobile portrait mode :
-                //because if we are in portrait mode the video will be in portrait mode too
-                //should not do that on Android/Sony Xperia. cf https://github.com/jeeliz/jeelizFaceFilter/issues/65
-                //JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
-            } //end if mobile
+                const iOSVersion = JeelizMediaStreamAPIHelper.get_IOSVersion();
+                //IOS is <12.2:
+                if (iOSVersion[0]<12
+                    || (iOSVersion[0]===12 && iOSVersion[1]<2)){
+                    JeelizMediaStreamAPIHelper.switch_whIfPortrait(mandatory);
+                }
+
+            } /*else if (JeelizMediaStreamAPIHelper.check_isMobile()){
+                                console.log('INFO in JeelizMediaStreamAPIHelper() - get() : isMobile but not iOS');
+                            } //end if mobile
+            */
 
             //see https://stackoverflow.com/questions/45692526/ios-11-getusermedia-not-working:
             if (mandatory['video']['width'] && mandatory['video']['width']['ideal']){
