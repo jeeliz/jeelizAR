@@ -12,7 +12,7 @@ const JeelizCat=(function(){
 	const _settings={
 		neuralNet: '../../neuralNets/cat.json',
 		
-		thresholdDetectFactor: 0.77,//0.76,
+		thresholdDetectFactor: 0.7,//0.76,
 		nDetectionsPerLoop: 3,
 		animateDelay: 1, //in ms
 		scan: {

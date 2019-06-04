@@ -199,7 +199,8 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
   * `<boolean> isSkipConfirmation`: makes detection easier (more sensitive) but can trigger more false positives. Default: `false`,
   * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
   * `[<float>,<float>,<float>] trackingFactors`: tracking sensitivity for translation along X,Y axis and scale. Default: `1.0`,
-  * `<float> thresholdDetectFactorUnstitch`: stop tracking if detection threshold is below this value. Used only if `isKeepTracking=true`. Should be smaller than `thresholdDetectFactor`.
+  * `<float> thresholdDetectFactorUnstitch`: stop tracking if detection threshold is below this value. Used only if `isKeepTracking=true`. Should be smaller than `thresholdDetectFactor`,
+  * `<float> secondNeighborFactor`: Do not confirm an object if another object has a detection score of at least `secondNeighborFactor * objectDetectionScore`. Default value is `0.7`.
 
 The detection function returns an object, `detectState`. For optimization purpose it is assigned by reference, not by value. It is a dictionary with these properties:
 * `<float> distance`: learning distance, ie distance between the camera and the object during the training of the dataset. Gives a clue about the real scale of the object,
