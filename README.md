@@ -200,7 +200,16 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
   * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
   * `[<float>,<float>,<float>] trackingFactors`: tracking sensitivity for translation along X,Y axis and scale. Default: `1.0`,
   * `<float> thresholdDetectFactorUnstitch`: stop tracking if detection threshold is below this value. Used only if `isKeepTracking=true`. Should be smaller than `thresholdDetectFactor`,
-  * `<float> secondNeighborFactor`: Do not confirm an object if another object has a detection score of at least `secondNeighborFactor * objectDetectionScore`. Default value is `0.7`.
+  * `<float> secondNeighborFactor`: Do not confirm an object if another object has a detection score of at least `secondNeighborFactor * objectDetectionScore`. Default value is `0.7`,
+  * `<int> nLocateAutomoves`: number of detection step in the `LOCATE` stage (juste move the input detection window with noise) (default: `10`),
+  * `<float> locateMoveNoiseAmplitude`: noise during the `LOCATE` stage, relative to input window dimensions (default: `0.01`),
+  * `<int> nConfirmAutomoves`: number of detection steps during the `CONFIRM` stage (default: `8`),
+  * `<float> thresholdConfirmOffset`: abord CONFIRM stage if detection score is below the object detection threshold + this value (default: `-0.02`),
+  * `<float> confirmMoveNoiseAmplitude`: noise during the `CONFIRM` stage, relative to input window dimensions (default: `0.01`),
+  * `<int> nConfirmUnstitchMoves`: in keep tracking mode (`isKeepTracking = true`, stop the tracking after this number of unsuccessful detections (default: `20`),
+  * `[<float> position, <float> angle]`: if ambiguous detection (2 objects have close scores) during the `CONFIRM` stage, tilt the input window. First value is relative to window dimensions, the second is the angle in degrees ( default: `[0.1, 10]`).
+    
+
 
 The detection function returns an object, `detectState`. For optimization purpose it is assigned by reference, not by value. It is a dictionary with these properties:
 * `<float> distance`: learning distance, ie distance between the camera and the object during the training of the dataset. Gives a clue about the real scale of the object,
