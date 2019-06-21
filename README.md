@@ -195,6 +195,7 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
   * `<float> thresholdDetectFactor`: a factor applied on the detection thresholds for the detected object. The default value is `1`. For example if it equals `0.5`, the detection will be 2 times easier.
   * `<string> cutShader`: can tweak the default shader used to crop the video area. This option is only available for WebXR demos. The possible values are:
     * `null`: default value, does not apply a filter and keep RGBA channels,
+    * `median`: apply a 3x3 median filter on RGB channels separately,
     * `IOS`: value optimized of IOS devices for WebXR usage only. Copy the red channel into the other color channels and apply a 5 pixels median filter.
   * `<boolean> isSkipConfirmation`: makes detection easier (more sensitive) but can trigger more false positives. Default: `false`,
   * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
@@ -203,11 +204,12 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
   * `<float> secondNeighborFactor`: Do not confirm an object if another object has a detection score of at least `secondNeighborFactor * objectDetectionScore`. Default value is `0.7`,
   * `<int> nLocateAutomoves`: number of detection step in the `LOCATE` stage (juste move the input detection window with noise) (default: `10`),
   * `<float> locateMoveNoiseAmplitude`: noise during the `LOCATE` stage, relative to input window dimensions (default: `0.01`),
-  * `<int> nConfirmAutomoves`: number of detection steps during the `CONFIRM` stage (default: `8`),
+  * `<int> nConfirmAutoMoves`: number of detection steps during the `CONFIRM` stage (default: `8`),
   * `<float> thresholdConfirmOffset`: abord CONFIRM stage if detection score is below the object detection threshold + this value (default: `-0.02`),
   * `<float> confirmMoveNoiseAmplitude`: noise during the `CONFIRM` stage, relative to input window dimensions (default: `0.01`),
   * `<int> nConfirmUnstitchMoves`: in keep tracking mode (`isKeepTracking = true`, stop the tracking after this number of unsuccessful detections (default: `20`),
-  * `[<float> position, <float> angle]`: if ambiguous detection (2 objects have close scores) during the `CONFIRM` stage, tilt the input window. First value is relative to window dimensions, the second is the angle in degrees ( default: `[0.1, 10]`).
+  * `[<float> position, <float> angle]`: if ambiguous detection (2 objects have close scores) during the `CONFIRM` stage, tilt the input window. First value is relative to window dimensions, the second is the angle in degrees ( default: `[0.1, 10]`),
+  * `<float> confirmScoreMinFactorDuringAutoMove`: During confirm stage, minimum score for each move. If the score is smaller than this value, come back to the sweep stage. Default is `0.3`.
     
 
 
