@@ -193,10 +193,13 @@ The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPe
 * `<videoFrame> frame` is used only with WebXR demos (see [WebXR integration section](#webxr-integration)). Otherwise set it to `null`,
 * `<dictionary> options` is an optional dictionary which can have these properties:
   * `<float> thresholdDetectFactor`: a factor applied on the detection thresholds for the detected object. The default value is `1`. For example if it equals `0.5`, the detection will be 2 times easier.
-  * `<string> cutShader`: can tweak the default shader used to crop the video area. This option is only available for WebXR demos. The possible values are:
-    * `null`: default value, does not apply a filter and keep RGBA channels,
-    * `median`: apply a 3x3 median filter on RGB channels separately,
-    * `IOS`: value optimized of IOS devices for WebXR usage only. Copy the red channel into the other color channels and apply a 5 pixels median filter.
+  * `<string> cutShader`: Tweak the default shader used to crop the video area. The possible values are:
+    * For WebXR viewer demos:
+      * `null`: default value, does not apply a filter and keep RGBA channels,
+      * `IOS`: value optimized of IOS devices for WebXR usage only. Copy the red channel into the other color channels and apply a 5 pixels median filter
+    * For default use:
+      * `median`: apply a 3x3 median filter on RGB channels separately,
+      * `null`: default value, does not apply a filter and keep RGBA channels
   * `<boolean> isSkipConfirmation`: makes detection easier (more sensitive) but can trigger more false positives. Default: `false`,
   * `<boolean> isKeepTracking`: If we should keep tracking an object after its detection. Default: `false`,
   * `[<float>,<float>,<float>] trackingFactors`: tracking sensitivity for translation along X,Y axis and scale. Default: `1.0`,
