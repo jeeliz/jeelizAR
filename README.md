@@ -68,10 +68,12 @@ If you have made an application or a fun demonstration using this library, we wo
 
 
 ### Standard browser demos
-These demonstration should work in your browser if you have a webcam.
+These demonstrations should work in your browser if you have a webcam.
 
 * Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
 * Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com) for desktop computers only): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/) [Youtube video](https://www.youtube.com/watch?v=MqvweemM_-I)
+* THREE.js Sprite 33cl (12oz) can detection demo: [source code](/demos/threejs/sprite/) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/sprite/)
+* Amazon Sumerian demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/)
 
 ### WebXR viewer demos
 To run these demonstrations, you need a web browser implementing WebXR. We hope it will be implemented soon in all web browsers! 
@@ -81,7 +83,6 @@ To run these demonstrations, you need a web browser implementing WebXR. We hope 
 Then you can run these demos:
 * WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
 * WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/) [Youtube video](https://www.youtube.com/watch?v=9klHhWxZHoc)
-
 
 ### 8thWall demos
 These demos run in a standard web browser on mobile or tablet. They rely on the amazing [8th Wall AR engine](https://8thwall.com/). We use the web version of the engine and we started from the THREE.JS web sample. The web engine is not released publicly yet, so you need to:
@@ -94,6 +95,7 @@ The demo:
 * AR Coffee: [source code](/demos/8thWallARCoffee/) [Youtube video](https://www.youtube.com/watch?v=3j7uB4-063w)
 
 
+
 ## Specifications
 
 ### Get started
@@ -101,15 +103,15 @@ The most basic integration example of this library is the first demo, the [debug
 In `index.html`, we include in the `<head>` section the main library script, `/dist/jeelizAR.js`, the `MediaStramAPI` (formerly called `getUserMedia API`) helper, `/helpers/JeelizMediaStreamAPIHelper.js` and the demo script, `demo.js`:
 
 ```html
-<script src="../../dist/jeelizAR.js"></script>
-<script src="../../helpers/JeelizMediaStreamAPIHelper.js"></script>
-<script src="demo.js"></script>
+<script src = "../../dist/jeelizAR.js"></script>
+<script src = "../../helpers/JeelizMediaStreamAPIHelper.js"></script>
+<script src = "demo.js"></script>
 ```
 
 In the `<body>` section of `index.html`, we put a `<canvas>` element which will be used to initialize the WebGL context used by the library for deep learning computation, and to possibly display a debug rendering:
 
 ```html
-<canvas id='debugJeeARCanvas'></canvas>
+<canvas id = 'debugJeeARCanvas'></canvas>
 ```
 
 
@@ -189,7 +191,7 @@ The `JEEARAPI.init` takes a dictionary as argument with these properties:
 
 ### The Detection function
 The function which triggers the detection is `JEEARAPI.detect(<int>nDetectionsPerLoop, <videoFrame>frame, <dictionary>options)`.
-* `<int> nDetectionPerLoop` is the number of consecutive detections proceeded. The higher it is, the faster the detection will be. But it may slow down the whole application if it is too high because the function call will consume too much GPU resources. A value between `3` and `6` is advised.
+* `<int> nDetectionPerLoop` is the number of consecutive detections proceeded. The higher it is, the faster the detection will be. But it may slow down the whole application if it is too high because the function call will consume too much GPU resources. A value between `3` and `6` is advised. If the value is `0`, the number of detection per loop is adaptative between `1` and `6` with an initial value of `3`,
 * `<videoFrame> frame` is used only with WebXR demos (see [WebXR integration section](#webxr-integration)). Otherwise set it to `null`,
 * `<dictionary> options` is an optional dictionary which can have these properties:
   * `<float> thresholdDetectFactor`: a factor applied on the detection thresholds for the detected object. The default value is `1`. For example if it equals `0.5`, the detection will be 2 times easier.
@@ -303,8 +305,11 @@ We provide several neural network models in the [/neuralNets/](/neuralNets/) pat
 | model file    		   | detected labels 			    | input size   | detection cost | reliability | remarks |
 | :---         			   | :---        				      | :---         |     :---:      |     :---:   |  :---   |
 | `basic4.json`   		 | CUP,CHAIR,BICYCLE,LAPTOP |  128*128px   | **			        |     **      |  |
-| `basic4Light.json`   | CUP,CHAIR,BICYCLE,LAPTOP |  64*64px     | *				      |      *      |  |
-| `cat.json`           | CAT                      |  64*64px     | ***            |      ***    | detect cat face  |
+| `basic4Light.json`          | CUP,CHAIR,BICYCLE,LAPTOP |  64*64px     | *				      |      *      |  |
+| `cat.json`                  | CAT                      |  64*64px     | ***            |      ***    | detect cat face  |
+| `sprite0.json`              | SPRITECAN                |  128*128px   | ***            |      ***    | standalone network (6D detection) |
+| `ARCoffeeStandalone01.json` | CUP                |  64*64px   | **            |      ***    | standalone network (6D detection) |
+
 
 
 The input size is the resolution of the input image of the network. The detection window is not static: it slides along the video both for position and scale. If you use this library with WebXR and IOS, the video resolution will be `480*270` pixels, so a `64*64` pixels input will be enough. If for example you used a `128*128` pixels input neural network model, the input image would often need to be enlarged before being given as input.

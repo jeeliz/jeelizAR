@@ -1,0 +1,28 @@
+body {
+  margin: 0px;
+  background-color: #333;
+  overflow: hidden !important;
+}
+
+#ARCanvas {
+  display: none;
+}
+
+#threeCanvas {
+  z-index: 10;
+}
+
+#webcamVideo {
+  z-index: 1;
+}
+ 
+#threeCanvas, #webcamVideo {
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: auto !important;
+  height: auto !important;
+}
