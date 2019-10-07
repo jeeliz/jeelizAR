@@ -307,12 +307,33 @@ var JeelizMediaStreamAPIHelper = {
       }
 
       setTimeout(function(){
-        video['volume']=0.0;
+        video['volume'] = 0.0;
         JeelizMediaStreamAPIHelper.enable_HTMLprop(video, 'muted');
       }, 5);
     } //end if safari
   }, //end mute()
 
+  toggle_stream( video, isPlaying, mandatoryConstraints){
+    return new Promise(function(accept, reject){
+      if (!video['srcObject'] || !video['srcObject']['getVideoTracks']){
+        reject('BAD_IMPLEMENTATION');
+        return;
+      }
+      const tracks = video['srcObject']['getVideoTracks']();
+      if (tracks.length !==1 ){
+        reject('INVALID_TRACKNUMBER');
+        return;
+      }
+      const videoTrack = tracks[0];
+      
+      if (isPlaying){
+        JeelizMediaStreamAPIHelper.get(video, accept, reject, mandatoryConstraints);
+      } else {
+        videoTrack['stop']();
+        accept();
+      }
+    }); //end return new Promise
+  },
 
   //get raw video stream (called by get())
   get_raw: function(video, callbackSuccess, callbackError, constraints){
@@ -361,7 +382,7 @@ var JeelizMediaStreamAPIHelper = {
               try {
                 const mediaStreamTrack = localMediaStream['getVideoTracks']()[0];
                 if (mediaStreamTrack){
-                  optionsReturned.mediaStreamTrack=mediaStreamTrack;
+                  optionsReturned.mediaStreamTrack = mediaStreamTrack;
                   optionsReturned.capabilities = mediaStreamTrack['getCapabilities']();
                   optionsReturned.settings = mediaStreamTrack['getSettings']();
                 }
@@ -518,12 +539,12 @@ var JeelizMediaStreamAPIHelper = {
 
       const rec_tryConstraint = function(remainingConstraints){
         if (remainingConstraints.length === 0){
-          callbackError('INVALID_FALLBACKCONSTRAINS');
+          callbackError('INVALID_FALLBACKCONSTRAINTS');
           return;
         }
         const testedConstraints = remainingConstraints.shift();
         JeelizMediaStreamAPIHelper.get_raw(video, callbackSuccess, function(err){
-                    console.log('WARNING : fails with constraint = ', JSON.stringify(testedConstraints), err);
+                    console.log('WARNING : fails with constraints = ', JSON.stringify(testedConstraints), err);
           
           rec_tryConstraint(remainingConstraints);
         }, testedConstraints);
@@ -542,11 +563,11 @@ var JeelizMediaStreamAPIHelper = {
     // List cameras and microphones :
     navigator['mediaDevices']['enumerateDevices']()
     .then(function(devices) {
-      var videoDevices=devices.filter(function(device){
+      const videoDevices = devices.filter(function(device){
       return (device['kind'] && device['kind'].toLowerCase().indexOf('video')!==-1 && device['label'] && device['deviceId']);
     });
       if (videoDevices && videoDevices.length && videoDevices.length>0){ //there are multiple videoDevices
-      callback(videoDevices, false);
+        callback(videoDevices, false);
       } else { //there are no videoDevices, or only 1
             console.log('ERROR in JeelizMediaStreamAPIHelper - get_videoDevices() : no devices founds');
             callback(false, 'NODEVICESFOUND');
