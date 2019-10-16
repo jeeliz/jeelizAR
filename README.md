@@ -73,7 +73,7 @@ These demonstrations should work in your browser if you have a webcam.
 * Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
 * Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com) for desktop computers only): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/) [Youtube video](https://www.youtube.com/watch?v=MqvweemM_-I)
 * THREE.js Sprite 33cl (12oz) can detection demo: [source code](/demos/threejs/sprite/) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/sprite/)
-* Amazon Sumerian demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/)
+* Amazon Sumerian Sprite 33cl (12oz) detection demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/) [video on mobile](https://youtu.be/twXGObgloNY)
 
 ### WebXR viewer demos
 To run these demonstrations, you need a web browser implementing WebXR. We hope it will be implemented soon in all web browsers! 
