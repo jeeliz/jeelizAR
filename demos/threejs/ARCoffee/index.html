@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<htmL>
+  <head>
+    <title>AR Coffee offered by Jeeliz</title>
+    <meta charset='utf-8'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- JEELIZ AR LIBRARY: -->
+    <script src='../../../dist/jeelizAR.js'></script>
+
+    <!-- HELPER TO GET THE CAMERA VIDEO STREAM: -->
+    <script src='../../../helpers/JeelizMediaStreamAPIHelper.js'></script>
+
+    <!-- THIRD PARTY LIBRARIES: -->
+    <script src='../../../libs/threejs/v106/three.min.js'></script>
+    <script src='../../../libs/tween/tween.min.js'></script>
+
+    <!-- JEELIZAR THREE.JS HELPER: -->
+    <script src='../../../helpers/JeelizARThreeHelper.js'></script>
+
+    <!-- STABILIZER: -->
+    <script src='../../../helpers/JeelizThreeStabilizer.js'></script>
+
+    <!-- AR COFFEE ANIMATION: -->
+    <script src='../../webxrCoffee/CoffeeAnimation.js'></script>
+    <script src='../../../libs/threejs/v95/TeapotBufferGeometry.js'></script>
+
+    <!-- FORK ME ON GITHUB RIBBON: -->
+    <script src='../../appearance/widget.js'></script>
+
+    <!-- SHARE BUTTONS -->
+    <script src='https://platform-api.sharethis.com/js/sharethis.js#property=5d699c2316b81b0012138a7b&product=inline-share-buttons' async='async'></script>
+
+    <!-- MAIN SCRIPT: -->
+    <script src='demo.js'></script>
+    
+    <link rel='stylesheet' href='style.css' type='text/css'/>
+    <link href="https://fonts.googleapis.com/css?family=Hepta+Slab&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <canvas id='ARCanvas'></canvas>
+    <canvas id='threeCanvas'></canvas>
+    <video id='webcamVideo'></video>
+
+    <div class='userManual' id='userManual'>
+      The coffee is ready!<br/>
+      In which mug it should be poured?
+    </div>
+
+    <div class='notice'>
+      <div class='noticeText'>
+        AR Coffee offered by <a href='https://jeeliz.com' target='_blank'>Jeeliz</a>
+      </div>
+      <div class="sharethis-inline-share-buttons"></div>
+    </div>
+  </body>
+</htmL>

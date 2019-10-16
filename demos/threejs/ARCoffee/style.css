@@ -1,0 +1,69 @@
+body {
+  margin: 0px;
+  color: white;
+  overflow: hidden !important;
+  font-family: 'Hepta Slab', serif;
+}
+
+#ARCanvas {
+  display: none;
+}
+
+#threeCanvas {
+  z-index: 10;
+}
+
+#webcamVideo {
+  z-index: 1;
+}
+ 
+#threeCanvas, #webcamVideo {
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: auto !important;
+  height: auto !important;
+}
+
+a {
+  text-decoration: none;
+  color: #499fd1;
+}
+a:hover {
+  color: white;
+}
+
+.userManual {
+  position: fixed;
+  text-align: center;
+  width: 100vw;
+  z-index: 20;
+  top: 33vh;
+  line-height: 2em;
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.notice {
+  font-weight: bold;
+  background-color: rgba(0,0,0,0.4);
+  font-size: 22px;
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  text-align: center;
+  z-index: 20;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  box-sizing: border-box;
+}
+
+.noticeText {
+  margin-bottom: 0.5em;
+}

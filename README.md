@@ -1,11 +1,11 @@
-# JavaScript/WebGL lightweight object recognition library designed for WebXR
+# JavaScript/WebGL lightweight object detection and tracking library for WebAR
 
 
 
 <p align="center">
 <a href='https://www.youtube.com/watch?v=9klHhWxZHoc'><img src='https://img.youtube.com/vi/9klHhWxZHoc/0.jpg'></a>
 <br/>
-<i>Demonstration of this library: WebXR Coffee.<br/>The tea cup is detected and a 3D animation is played in augmented reality.</i>
+<i>Demonstration of this library: Standalone AR Coffee.<br/>The coffee cup is detected and a 3D animation is played in augmented reality. This demo only relies on JeelizAR and THREE.JS.</i>
 </p>
 
 
@@ -16,7 +16,7 @@
 * [Features](#features)
 * [Architecture](#architecture)
 * [Demonstrations](#demonstrations)
-  * [Standard browser demos](#standard-browser-demos)
+  * [Standalone demos](#standard-browser-demos)
   * [WebXR viewer demos](#webxr-viewer-demos)
   * [8thWall demos](#8thWall-demos)
 * [Specifications](#specifications)
@@ -68,17 +68,18 @@ If you have made an application or a fun demonstration using this library, we wo
 
 
 ### Standard browser demos
-These demonstrations should work in your browser if you have a webcam.
+These demonstrations work in a standard web browser. They only require webcam access.
 
 * Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
 * Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com) for desktop computers only): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/) [Youtube video](https://www.youtube.com/watch?v=MqvweemM_-I)
 * THREE.js Sprite 33cl (12oz) can detection demo: [source code](/demos/threejs/sprite/) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/sprite/)
-* Amazon Sumerian demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/)
+* Standalone AR Coffee demo: [source code](/demos/threejs/ARCoffee) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/ARCoffee/) [Youtube video]()
+* Amazon Sumerian Sprite 33cl (12oz) detection demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/) [Youtube video on mobile](https://youtu.be/twXGObgloNY)
 
 ### WebXR viewer demos
 To run these demonstrations, you need a web browser implementing WebXR. We hope it will be implemented soon in all web browsers! 
 * If you have and IOS device (Ipad, Iphone), you can install [WebXR viewer](https://itunes.apple.com/us/app/webxr-viewer/id1295998056?mt=8) from the Apple store. It is developped by the Mozilla Fundation. It is a modified Firefox with WebXR implemented using ArKit. You can then open the demonstrations from the URL bar of the application.
-* For Android devices, it should work with [WebARonARCore](https://github.com/google-ar/WebARonARCore), but we have not tested yet.
+* For Android devices, it should work with [WebARonARCore](https://github.com/google-ar/WebARonARCore), but we have not tested yet. Your device should still be compatible with *ARCore*.
 
 Then you can run these demos:
 * WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
