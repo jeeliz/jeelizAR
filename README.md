@@ -1,11 +1,12 @@
 # JavaScript/WebGL lightweight object detection and tracking library for WebAR
 
 
+https://img.youtube.com/vi/a09NSXp_ENU/0.jpg
 
 <p align="center">
-<a href='https://www.youtube.com/watch?v=9klHhWxZHoc'><img src='https://img.youtube.com/vi/9klHhWxZHoc/0.jpg'></a>
+<a href='https://youtu.be/a09NSXp_ENU'><img src='https://img.youtube.com/vi/a09NSXp_ENU/0.jpg'></a>
 <br/>
-<i>Demonstration of this library: Standalone AR Coffee.<br/>The coffee cup is detected and a 3D animation is played in augmented reality. This demo only relies on JeelizAR and THREE.JS.</i>
+<i>Standalone AR Coffee.<br/>The coffee cup is detected and a 3D animation is played in augmented reality. This demo only relies on JeelizAR and THREE.JS.</i>
 </p>
 
 
@@ -73,7 +74,7 @@ These demonstrations work in a standard web browser. They only require webcam ac
 * Simple object recognition using the webcam (for debugging): [live demo](https://jeeliz.com/demos/augmentedReality/demos/debugDetection/) [source code](/demos/debugDetection/)
 * Cat recognition (displayed as header of [https://jeeliz.com](jeeliz.com) for desktop computers only): [live demo](https://jeeliz.com/demos/augmentedReality/demos/cat/) [source code](/demos/cat/) [Youtube video](https://www.youtube.com/watch?v=MqvweemM_-I)
 * THREE.js Sprite 33cl (12oz) can detection demo: [source code](/demos/threejs/sprite/) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/sprite/)
-* Standalone AR Coffee demo: [source code](/demos/threejs/ARCoffee) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/ARCoffee/) [Youtube video]()
+* Standalone AR Coffee demo: [source code](/demos/threejs/ARCoffee) [live demo](https://jeeliz.com/demos/augmentedReality/demos/threejs/ARCoffee/) [Youtube video](https://youtu.be/a09NSXp_ENU)
 * Amazon Sumerian Sprite 33cl (12oz) detection demo: [source code](/demos/amazonSumerian) [live demo](https://f9db302269f94d7fafed339cf6c11152.us-east-2.sumerian.aws/) [Youtube video on mobile](https://youtu.be/twXGObgloNY)
 
 ### WebXR viewer demos
@@ -83,7 +84,7 @@ To run these demonstrations, you need a web browser implementing WebXR. We hope 
 
 Then you can run these demos:
 * WebXR object labelling: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxr/) [source code](/demos/webxr/)
-* WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/) [Youtube video](https://www.youtube.com/watch?v=9klHhWxZHoc)
+* WebXR coffee: [live demo](https://jeeliz.com/demos/augmentedReality/demos/webxrCoffee/) [source code](/demos/webxrCoffee/) [Youtube video](https://youtu.be/9klHhWxZHoc)
 
 ### 8thWall demos
 These demos run in a standard web browser on mobile or tablet. They rely on the amazing [8th Wall AR engine](https://8thwall.com/). We use the web version of the engine and we started from the THREE.JS web sample. The web engine is not released publicly yet, so you need to:
