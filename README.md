@@ -6,7 +6,9 @@ https://img.youtube.com/vi/a09NSXp_ENU/0.jpg
 <p align="center">
 <a href='https://youtu.be/a09NSXp_ENU'><img src='https://img.youtube.com/vi/a09NSXp_ENU/0.jpg'></a>
 <br/>
-<i>Standalone AR Coffee.<br/>The coffee cup is detected and a 3D animation is played in augmented reality. This demo only relies on JeelizAR and THREE.JS.</i>
+<i><a href='https://jeeliz.com/demos/augmentedReality/demos/threejs/ARCoffee/' target='_blank'>Standalone AR Coffee</a> - Enjoy a free coffee offered by <a href='https://jeeliz.com'>Jeeliz</a>!<br/>
+  The coffee cup is detected and a 3D animation is played in augmented reality.<br/>
+  This demo only relies on JeelizAR and THREE.JS.</i>
 </p>
 
 
