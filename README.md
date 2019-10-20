@@ -1,8 +1,6 @@
 # JavaScript/WebGL lightweight object detection and tracking library for WebAR
 
 
-https://img.youtube.com/vi/a09NSXp_ENU/0.jpg
-
 <p align="center">
 <a href='https://youtu.be/a09NSXp_ENU'><img src='https://img.youtube.com/vi/a09NSXp_ENU/0.jpg'></a>
 <br/>
@@ -10,7 +8,6 @@ https://img.youtube.com/vi/a09NSXp_ENU/0.jpg
   The coffee cup is detected and a 3D animation is played in augmented reality.<br/>
   This demo only relies on JeelizAR and THREE.JS.</i>
 </p>
-
 
 
 
