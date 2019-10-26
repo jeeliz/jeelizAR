@@ -68,7 +68,7 @@ function init(){
     cameraFov: _settings.cameraFov,
     followZRot: _settings.followZRot,
     scanSettings: _settings.scanSettings,
-    stabilizerOptions: {}
+    stabilizerOptions: {n: 3}
   });
 }
 

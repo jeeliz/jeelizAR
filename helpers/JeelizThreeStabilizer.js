@@ -3,6 +3,7 @@ spec:
   - <THREE.Object3D> obj3D: Object to stabilize
   - <integer> n: the size of the sliding window to compute floating average is 2^n. default: 3
   - <float> k: stabilization coefficient. Default: 1
+  - <boolean> enablePositionSigmaWeighting. Default: false
 
  */
 const JeelizThreeStabilizer = (function(){
@@ -13,6 +14,32 @@ const JeelizThreeStabilizer = (function(){
       result.add(pos);
     });
     result.divideScalar(positions.length);
+  }
+
+  function computePositionSwitches(positions, positionMean, switchesCount){
+    switchesCount.set(0, 0, 0);
+    let sx = 0, sy = 0, sz = 0;
+    positions.forEach(function(position, ind){
+      const nsx = Math.sign(position.x - positionMean.x);
+      const nsy = Math.sign(position.y - positionMean.y);
+      const nsz = Math.sign(position.z - positionMean.z);
+      if (ind > 0) {
+        switchesCount.x += Math.abs((nsx - sx)) / 2.0;
+        switchesCount.y += Math.abs((nsy - sy)) / 2.0;
+        switchesCount.z += Math.abs((nsz - sz)) / 2.0;
+      }
+      sx = nsx, sy = nsy, sz = nsz;
+    });
+  }
+
+  function computePositionSigmaFactor(N, switchesCount, sigmaFactor){
+    if (N < 4) return;
+    const denom = N - 2;
+    sigmaFactor.set(
+        (switchesCount.x - 1) / denom,
+        (switchesCount.y - 1) / denom,
+        (switchesCount.z - 1) / denom
+      );
   }
 
   function computePositionsSigma(positions, mean, result){
@@ -49,7 +76,8 @@ const JeelizThreeStabilizer = (function(){
       
       const _spec = Object.assign({ //default values:
         n: 3,
-        k: 1
+        k: 1,
+        enablePositionSigmaWeighting: false
       }, spec);
       const _N = Math.pow(2, _spec.n);
       const _quaternionSlerps = [];
@@ -64,6 +92,8 @@ const JeelizThreeStabilizer = (function(){
       const _positionMean = new THREE.Vector3();
       const _quaternionMean = new THREE.Quaternion();
 
+      const _positionSwitchesCount = new THREE.Vector3();
+      const _positionSigmaFactor = new THREE.Vector3(1, 1, 1);
       const _positionSigma = new THREE.Vector3();
 
       const _positionStabilized = new THREE.Vector3();
@@ -123,6 +153,13 @@ const JeelizThreeStabilizer = (function(){
           
           // compute sigma, represented by an angle and a Vector3:
           computePositionsSigma(_lastPositions, _positionMean, _positionSigma);
+          
+          if (_spec.enablePositionSigmaWeighting){
+            computePositionSwitches(_lastPositions, _positionMean, _positionSwitchesCount);
+            computePositionSigmaFactor(_N, _positionSwitchesCount, _positionSigmaFactor);
+            _positionSigma.multiply(_positionSigmaFactor);
+          }
+
           const angleSigma = computeQuaternionsSigma(_lastQuaternions, _quaternionMean);
 
           // compute stabilized position:
@@ -145,6 +182,7 @@ const JeelizThreeStabilizer = (function(){
 
         reset: function(){
           _counter = 0;
+          _positionSigmaFactor.set(1, 1, 1);
         }
       };
       return that;
