@@ -13,6 +13,7 @@
   - <dict> scanSettings
   - <object> stabilizerOptions
   - <boolean> isFullScreen
+  - <float> zOffset - 0.5 by default, relative
  */
 "use strict";
 
@@ -23,31 +24,44 @@ const JeelizARThreeHelper = (function(){
     cameraZFar: 500
   };
 
-  let _video = null, _nDetectsPerLoop = null, _detectOptions = null;
+  //let _video = null, _nDetectsPerLoop = null, _detectOptions = null;
   let _threeCamera = null, _threeScene = null, _threeEuler = null, _threeQuaternion = null, _threePosition = null, _threeContainers = {}, _threeRenderer = null;
-  let _stabilizerOptions = null, _stabilizers = {}, _isStabilized = false;
-  let _cameraAutoFoV = false, _scaleW = 1, _isFullScreen = false;
+  const _stabilizers = {};
+  let _scaleW = 1;
+  
+  const _defaultSpec = {
+    zOffset: 0.5,
+    video: null,
+    canvas: null,
+    isStabilized: false,
+    stabilizerOptions: null,
+    nDetectsPerLoop: 0,
+    detectOptions: null,
+    cameraAutoFoV: true,
+    isFullScreen: false,
+    followZRot: false,
+    scanSettings: null
+  };
+
+  let _spec = null;
 
   const _callbacks = {};
 
   const that = {
     init: function(spec){
-      // initialize JEEAR:
-      JEEARAPI.init({
-        video: spec.video,
-        canvas: spec.ARCanvas,
-        followZRot: spec.followZRot,
-        scanSettings: spec.scanSettings
+      // Extract parameters:
+      _spec = Object.assign({}, _defaultSpec, spec, {
+        isStabilized: (spec.stabilizerOptions !== undefined && JeelizThreeStabilizer) ? true : false,
+        cameraAutoFoV: (spec.cameraFov) ? false : true
       });
 
-      // Extract parameters:
-      _video = spec.video;
-      _isStabilized = (spec.stabilizerOptions !== undefined && JeelizThreeStabilizer) ? true : false;
-      _stabilizerOptions = (_isStabilized) ? spec.stabilizerOptions : null;
-      _nDetectsPerLoop = spec.nDetectsPerLoop;
-      _detectOptions = spec.detectOptions;
-      _cameraAutoFoV = (spec.cameraFov) ? false : true;
-      _isFullScreen = (spec.isFullScreen) ? true : false;
+      // Initialize JEEAR:
+      JEEARAPI.init({
+        video: _spec.video,
+        canvas: _spec.ARCanvas,
+        followZRot: _spec.followZRot,
+        scanSettings: _spec.scanSettings
+      });
 
       // Initialize THREE.js instances:
       _threeRenderer = new THREE.WebGLRenderer({
@@ -56,7 +70,7 @@ const JeelizARThreeHelper = (function(){
       });
 
       _threeScene = new THREE.Scene();
-      _threeCamera = (_cameraAutoFoV ) ? that.create_autoFoVCamera() : new THREE.PerspectiveCamera( spec.cameraFov, spec.threeCanvas.width / spec.threeCanvas.height, _settings.cameraZNear, _settings.cameraZFar );
+      _threeCamera = (_spec.cameraAutoFoV ) ? that.create_autoFoVCamera() : new THREE.PerspectiveCamera( spec.cameraFov, spec.threeCanvas.width / spec.threeCanvas.height, _settings.cameraZNear, _settings.cameraZFar );
       _threeEuler = new THREE.Euler(0, 0, 0, 'ZXY');
       _threePosition = new THREE.Vector3();
       _threeQuaternion = new THREE.Quaternion();
@@ -71,17 +85,17 @@ const JeelizARThreeHelper = (function(){
     },
 
     resize: function(){
-      const w = _video.videoWidth;
-      const h = _video.videoHeight;
+      const w = _spec.video.videoWidth;
+      const h = _spec.video.videoHeight;
       const canvas = _threeRenderer.domElement;
-      if (_isFullScreen){
+      if (_spec.isFullScreen){
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       } else {
         canvas.width  = w;
         canvas.height = h;
       }
-      if (_cameraAutoFoV){
+      if (_spec.cameraAutoFoV){
         that.update_autoFoVCamera();
       } else {
         _threeRenderer.setSize(w,h);
@@ -91,7 +105,7 @@ const JeelizARThreeHelper = (function(){
     },
 
     animate: function(){
-      const detectState = JEEARAPI.detect(_nDetectsPerLoop, null, _detectOptions);
+      const detectState = JEEARAPI.detect(_spec.nDetectsPerLoop, null, _spec.detectOptions);
       
       for(let label in _threeContainers){
         const threeContainer = _threeContainers[label];
@@ -104,7 +118,7 @@ const JeelizARThreeHelper = (function(){
           continue;
         }
         
-        if (!threeContainer.visible && _isStabilized){
+        if (!threeContainer.visible && _spec.isStabilized){
           _stabilizers[label].reset();
         }
 
@@ -127,18 +141,18 @@ const JeelizARThreeHelper = (function(){
         const yv = 2 * detectState.positionScale[1] - 1;
         
         //coords in 3D of the center of the cube (in the view coordinates system)
-        const z = -D - 0.5;   // minus because view coordinate system Z goes backward. -0.5 because z is the coord of the center of the cube (not the front face)
+        const z = -D - _spec.zOffset;   // minus because view coordinate system Z goes backward. -0.5 because z is the coord of the center of the cube (not the front face)
         const x = xv * D * halfTanFOV;
         const y = yv * D * halfTanFOV / _threeCamera.aspect;
         _threePosition.set(x, y, z);
 
         // compute rotation:
-        const dPitch = detectState.pitch - Math.PI / 2;
+        const dPitch = detectState.pitch - Math.PI / 2; //look up/down rotation (around X axis)
         _threeEuler.set( -dPitch, detectState.yaw + Math.PI, -detectState.roll);
         _threeQuaternion.setFromEuler(_threeEuler);
 
         // apply position and rotation:
-        if (_isStabilized){
+        if (_spec.isStabilized){
           _stabilizers[label].update(_threePosition, _threeQuaternion);
         } else { // no stabilization, directly assign position and orientation:
           threeContainer.position.copy(_threePosition);
@@ -160,10 +174,10 @@ const JeelizARThreeHelper = (function(){
         _threeScene.add(threeContainer);
         
         // initialize stabilizer if required:
-        if (_isStabilized){
+        if (_spec.isStabilized){
           _stabilizers[label] = JeelizThreeStabilizer.instance(Object.assign({
             obj3D: threeContainer
-          }, _stabilizerOptions));
+          }, _spec.stabilizerOptions));
         }
       }
     },
@@ -199,8 +213,8 @@ const JeelizARThreeHelper = (function(){
       const canvasAspectRatio = cvw / cvh;
 
       // compute vertical field of view:
-      const vw = _video.videoWidth;
-      const vh = _video.videoHeight;
+      const vw = _spec.video.videoWidth;
+      const vh = _spec.video.videoHeight;
       const videoAspectRatio = vw / vh;
       const fovFactor = (vh > vw) ? (1.0 / videoAspectRatio) : 1.0;
       const fov = _settings.cameraMinVideoDimFov * fovFactor;
