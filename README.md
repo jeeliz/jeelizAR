@@ -1,6 +1,11 @@
 # JavaScript/WebGL lightweight object detection and tracking library for WebAR
 
 
+** WARNING: this repository is deprecated and not maintained anymore. Please use [WebAR.rocks.object](https://github.com/WebAR-rocks/WebAR.rocks.object) instead. **
+
+
+
+
 <p align="center">
 <a href='https://youtu.be/a09NSXp_ENU'><img src='https://img.youtube.com/vi/a09NSXp_ENU/0.jpg'></a>
 <br/>
